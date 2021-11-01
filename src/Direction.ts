@@ -1,14 +1,12 @@
 import { Settings } from "./Settings";
 
 export class Direction {
-
     private constructor(
         public readonly xDrawOffset: number,
         public readonly yDrawOffset: number,
         public readonly xMoveOffset: number,
         public readonly yMoveOffset: number,
         public readonly keyCode: string) { }
-
 
     public static readonly Right: Direction = new Direction(-Settings.Snake.size, 0, Settings.Snake.size, 0, "ArrowRight");
     public static readonly Left: Direction = new Direction(Settings.Snake.size, 0, -Settings.Snake.size, 0, "ArrowLeft");
