@@ -15,7 +15,7 @@ export class Scene extends Container {
 
         document.addEventListener("keydown", this.handleKeyDown.bind(this));
 
-        this.snake = new Snake(Settings.App.startingX, Settings.App.startingX, Settings.Snake.defaultLength);
+        this.snake = new Snake(Settings.App.startingX, Settings.App.startingY, Settings.Snake.defaultLength);
         this.fruit = new Fruit();
 
         this.addChild(this.fruit.graphics);
