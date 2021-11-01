@@ -21,6 +21,7 @@ export class Scene extends Container {
         this.addChild(this.fruit.graphics);
         this.addChild(this.snake.container);
 
+        Ticker.shared.minFPS = 1;
         Ticker.shared.maxFPS = Settings.App.FPS;
         Ticker.shared.add(this.tick, this);
     }
