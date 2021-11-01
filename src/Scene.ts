@@ -1,9 +1,10 @@
 import { Container, Graphics, Ticker } from "pixi.js";
-import { Direction } from "./Snake";
+import { Direction } from "./Direction";
+import { Snake } from "./Snake";
 
 export class Scene extends Container {
-    private readonly body: Graphics = new Graphics();
     private direction: Direction = Direction.Right;
+    private readonly snake: Snake; 
 
     constructor(width: number, height: number) {
         super();
@@ -11,50 +12,32 @@ export class Scene extends Container {
         this.width = width;
         this.height = height;
 
-        this.body.beginFill(0x111111);
-        this.body.drawRect(100, 100, 10, 10);
-        this.body.endFill()
-        this.addChild(this.body);
+        document.addEventListener("keydown", this.handleKeyDown.bind(this));
 
-        document.addEventListener("keydown", this.onKeyDown.bind(this));
+        this.snake = new Snake(200, 200);
+        this.snake.grow();
+        this.snake.grow();
+        this.snake.grow();
 
+        this.addChild(this.snake.container);
+
+        Ticker.shared.maxFPS = 59.99;
         Ticker.shared.add(this.tick, this);
     }
 
-    private onKeyDown(e: KeyboardEvent): void {
-        console.log("KeyDown event fired!", e);
-
-        switch (e.code) {
-            case "ArrowUp":
-                this.direction = Direction.Up;
-                break;
-            case "ArrowDown":
-                this.direction = Direction.Down;
-                break;
-            case "ArrowLeft":
-                this.direction = Direction.Left;
-                break;
-            case "ArrowRight":
-                this.direction = Direction.Right;
-                break;
+    private handleKeyDown(e: KeyboardEvent): void {
+        if(Direction.AllDirections.filter(dir => dir.keyCode == e.code).length > 0){
+            this.direction = Direction.AllDirections.find(dir => dir.keyCode == e.code);
         }
     }
 
     private tick(deltaTime: number) {
-        console.log(deltaTime);
-        switch (this.direction) {
-            case Direction.Up:
-                this.body.y -= deltaTime;
-                break;
-            case Direction.Down:
-                this.body.y += deltaTime;
-                break;
-            case Direction.Left:
-                this.body.x -= deltaTime;
-                break;
-            case Direction.Right:
-                this.body.x += deltaTime;
-                break;
+        console.log(Ticker.shared.FPS);
+
+        //true if illegal
+        if(this.snake.move(this.direction)){
+            alert("You lost");
+            Ticker.shared.stop();
         }
     }
 }

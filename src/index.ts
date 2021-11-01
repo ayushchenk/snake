@@ -7,8 +7,8 @@ const app = new Application({
 	autoDensity: true,
 	backgroundColor: 0xffffff,
 	antialias: true,
-	width: window.innerWidth,
-	height: window.innerHeight
+	width: Math.floor(window.innerWidth / 10) * 10,
+	height: Math.floor(window.innerHeight / 10) * 10
 });
 
 const scene = new Scene(app.screen.width, app.screen.height);
