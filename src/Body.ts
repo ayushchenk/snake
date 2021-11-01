@@ -4,7 +4,6 @@ import { Settings } from "./Settings";
 
 export class Body {
     public readonly graphics: Graphics;
-    public readonly next: Body;
 
     constructor(x: number, y: number, direction?: Direction) {
         this.graphics = new Graphics();
