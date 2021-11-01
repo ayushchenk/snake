@@ -1,30 +1,35 @@
 import { Container } from "@pixi/display";
 import { Body } from "./Body";
 import { Direction } from "./Direction";
+import { Settings } from "./Settings";
 
 export class Snake {
-    private readonly bodies: Body[] = [];
     private direction: Direction = Direction.Right;
+    private readonly tail: Body[] = [];
 
     public readonly container: Container = new Container();
+    public readonly head: Body;
 
-    constructor(x: number, y: number) {
-        this.container.width = window.innerWidth;
-        this.container.height = window.innerHeight;
+    constructor(x: number, y: number, length: number) {
+        this.container.width = Settings.App.width;
+        this.container.height = Settings.App.height;
 
-        const head = new Body(x, y);
+        this.head = new Body(x, y);
 
-        this.container.addChild(head.graphics);
-        this.bodies.push(head);
+        this.container.addChild(this.head.graphics);
+
+        for (let i = 1; i < length; i++) {
+            this.grow();
+        }
     }
 
-    public grow() {
-        const lastBodyPart = this.bodies[this.bodies.length - 1];
+    public grow(): void {
+        const lastBodyPart = this.tail[this.tail.length - 1] ?? this.head;
 
         const newBodyPart = new Body(lastBodyPart.graphics.x, lastBodyPart.graphics.y, this.direction);
 
         this.container.addChild(newBodyPart.graphics);
-        this.bodies.push(newBodyPart);
+        this.tail.push(newBodyPart);
     }
 
     public move(direction: Direction): boolean {
@@ -32,22 +37,30 @@ export class Snake {
 
         let oldLocation = this.head.moveIn(this.direction);
 
-        this.bodies.filter(part => part != this.head).forEach(part => {
+        this.tail.forEach(part => {
             oldLocation = part.moveTo(oldLocation);
         });
 
         return this.checkRules();
     }
 
-    private get head(): Body {
-        return this.bodies[0];
+    private checkRules(): boolean {
+        return this.checkBoundaries() || this.checkCollision();
     }
 
-    private checkRules(): boolean {
-        return this.checkBoundaries();
+    private checkCollision(): boolean {
+        let flag = false;
+
+        this.tail.forEach(part => {
+            if (this.head.graphics.x == part.graphics.x && this.head.graphics.y == part.graphics.y) {
+                flag = true;
+            }
+        });
+
+        return flag;
     }
 
     private checkBoundaries(): boolean {
-        return this.head.graphics.x >= Math.floor(window.innerWidth / 10) * 10 || this.head.graphics.x < 0 || this.head.graphics.y >= Math.floor(window.innerHeight / 10) * 10 || this.head.graphics.y < 0;
+        return this.head.graphics.x >= Settings.App.width || this.head.graphics.x < 0 || this.head.graphics.y >= Settings.App.height || this.head.graphics.y < 0;
     }
 }

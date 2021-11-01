@@ -1,5 +1,6 @@
 import { Graphics } from "@pixi/graphics";
 import { Direction } from "./Direction";
+import { Settings } from "./Settings";
 
 export class Body {
     public readonly graphics: Graphics;
@@ -15,9 +16,9 @@ export class Body {
             this.graphics.y += direction.yDrawOffset;
         }
 
-        this.graphics.lineStyle(1, 0xaaa);
-        this.graphics.beginFill(0x111);
-        this.graphics.drawRect(0, 0, 10, 10);
+        this.graphics.lineStyle(Settings.Snake.borderWidth, Settings.Snake.borderColor);
+        this.graphics.beginFill(Settings.Snake.color);
+        this.graphics.drawRect(0, 0, Settings.Snake.size, Settings.Snake.size);
         this.graphics.endFill();
     }
 

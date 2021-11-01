@@ -1,5 +1,6 @@
 import { Application } from 'pixi.js'
 import { Scene } from './scene';
+import { Settings } from './Settings';
 
 const app = new Application({
 	view: document.getElementById("pixi-canvas") as HTMLCanvasElement,
@@ -7,10 +8,10 @@ const app = new Application({
 	autoDensity: true,
 	backgroundColor: 0xffffff,
 	antialias: true,
-	width: Math.floor(window.innerWidth / 10) * 10,
-	height: Math.floor(window.innerHeight / 10) * 10
+	width: Settings.App.width,
+	height: Settings.App.height
 });
 
-const scene = new Scene(app.screen.width, app.screen.height);
+const scene = new Scene();
 
 app.stage.addChild(scene);
